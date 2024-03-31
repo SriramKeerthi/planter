@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  ws:
+    stdin_open: true
+    container_name: planter-ws
+    build: 
+      context: ./
+      dockerfile: ./apps/planter-ws/Dockerfile
+    volumes:
+      - /app/assets
+    ports:
+      - "127.0.0.1:3000:3000"
+
+networks:
+  tinyloop:

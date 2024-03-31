@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Checkbox Grid</title>
+    <style>
+        .grid {
+            display: flex;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="width">Width:</label>
+    <input type="number" id="width" min="1" max="50" value="30">
+    <label for="height">Height:</label>
+    <input type="number" id="height" min="1" max="50" value="17">
+
+    <div class="grid" id="checkboxGrid"></div>
+
+    <script>
+        const heightInput = document.getElementById('height');
+        const widthInput = document.getElementById('width');
+        const checkboxGrid = document.getElementById('checkboxGrid');
+
+        function createCheckboxGrid(rows, columns) {
+            const checkboxStates = []; // Array to store checkbox states
+
+            // Store checkbox states before clearing the grid
+            const checkboxes = checkboxGrid.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach((checkbox) => {
+                checkboxStates.push(checkbox.checked);
+            });
+
+            checkboxGrid.innerHTML = '';
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < columns; j++) {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.style.width = '10px';
+                    checkbox.style.height = '10px';
+                    checkbox.style.margin = '0';
+
+                    // Set checkbox state based on stored states
+                    checkbox.checked = checkboxStates[i * columns + j] || false;
+
+                    checkboxGrid.appendChild(checkbox);
+                }
+                checkboxGrid.appendChild(document.createElement('br'));
+            }
+        }
+
+        heightInput.addEventListener('input', function () {
+            const rows = parseInt(heightInput.value);
+            const columns = parseInt(widthInput.value);
+            createCheckboxGrid(rows, columns);
+        });
+
+        widthInput.addEventListener('input', function () {
+            const rows = parseInt(heightInput.value);
+            const columns = parseInt(widthInput.value);
+            createCheckboxGrid(rows, columns);
+        });
+
+        createCheckboxGrid(parseInt(heightInput.value), parseInt(widthInput.value));
+    </script>
+</body>
+
+</html>

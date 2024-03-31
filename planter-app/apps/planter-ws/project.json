@@ -1,0 +1,46 @@
+{
+  "name": "planter-ws",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/planter-ws/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/planter-ws",
+        "main": "apps/planter-ws/src/main.ts",
+        "tsConfig": "apps/planter-ws/tsconfig.app.json",
+        "assets": ["apps/planter-ws/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "planter-ws:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "planter-ws:build:development"
+        },
+        "production": {
+          "buildTarget": "planter-ws:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

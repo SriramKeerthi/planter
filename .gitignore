@@ -1,0 +1,6 @@
+.envrc
+node_modules
+.editorconfig
+.nx
+.vscode
+.DS_Store
