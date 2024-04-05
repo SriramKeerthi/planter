@@ -7,10 +7,15 @@ services:
     build: 
       context: ./
       dockerfile: ./apps/planter-ws/Dockerfile
+    env_file:
+      - .env
     volumes:
       - /app/assets
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:7597:3000"
+    networks:
+      - server_default
 
 networks:
-  tinyloop:
+  server_default:
+    external: true

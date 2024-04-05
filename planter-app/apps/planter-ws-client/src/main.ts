@@ -1,7 +1,7 @@
 import fs from 'fs';
 import WebSocket from 'ws';
 
-const ws = new WebSocket('ws://192.168.1.67:3000/ws', { auth: 'sriram:password' }); // replace with your server address
+const ws = new WebSocket('ws://planter.kunjathur.com/ws', { auth: `${process.env['WS_USERNAME']}:${process.env['WS_PASSWORD']}` }); // replace with your server address
 
 ws.on('open', () => {
     console.log('Connected to server!');
@@ -16,31 +16,29 @@ ws.on('open', () => {
                 data: JSON.stringify({
                     event: "config",
                     data: {
-                        lights: true,
-                        sounds: true,
-                        tftBrightness: 0,
-                        ledBrightness: 5,
-                        state: false,
+                        sounds: false,
+                        tftBrightness: 128,
+                        ledBrightness: 255
                     }
                 }),
             }
         }
     ));
 
-    // ws.send(JSON.stringify({
-    //     event: 'push',
-    //     data: {
-    //         cid: 'MDEyMzQ1Njc4OWFiY2RlZg==',
-    //         data: JSON.stringify({
-    //             event: "image",
-    //             data: {
-    //                 image: Buffer.from(image).toString('base64'),
-    //                 ir: 250,
-    //                 ic: image.length / 510
-    //             }
-    //         })
-    //     }
-    // }))
+    ws.send(JSON.stringify({
+        event: 'push',
+        data: {
+            cid: 'MDEyMzQ1Njc4OWFiY2RlZg==',
+            data: JSON.stringify({
+                event: "image",
+                data: {
+                    image: Buffer.from(image).toString('base64'),
+                    ir: 250,
+                    ic: image.length / 510
+                }
+            })
+        }
+    }))
 
     // ws.send(JSON.stringify({
     //     event: 'push',
@@ -52,6 +50,18 @@ ws.on('open', () => {
     //         })
     //     }
     // }))
+    ws.send(JSON.stringify({
+        event: 'push',
+        data: {
+            cid: 'MDEyMzQ1Njc4OWFiY2RlZg==',
+            data: JSON.stringify({
+                event: "message",
+                data: {
+                    message: "\n\n\n    Hello there!"
+                }
+            })
+        }
+    }))
 });
 
 ws.on('message', (data, isBinary) => {

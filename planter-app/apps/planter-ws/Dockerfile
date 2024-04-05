@@ -11,8 +11,8 @@ RUN npx nx build planter-ws
 FROM node:alpine as runtime
 WORKDIR /app
 COPY --from=build /app/dist/apps/planter-ws /app
-RUN sh -c ls
 RUN npm install
+RUN ls -al
 
-EXPOSE 3000 80
-CMD [ "node", "src/main.js" ]
+EXPOSE 3000 3000
+CMD [ "node", "main.js" ]

@@ -13,6 +13,14 @@ interface AckPayload {
   readonly message: string;
 }
 
+interface StatsPayload {
+  readonly heap: number;
+  readonly vbat: number;
+  readonly touch1: number;
+  readonly touch2: number;
+  readonly ldr: number;
+}
+
 interface TriggerPayload {
   readonly cid: string;
   readonly images: string[];
@@ -28,6 +36,11 @@ interface ImagePayload {
   readonly image: string;
   readonly ic: number;
   readonly ir: number;
+}
+
+interface LogPayload {
+  readonly level: string;
+  readonly message: string;
 }
 
 interface ReturnMessagePayload {
@@ -108,6 +121,19 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
         message: `You are ${id}. Sending message to client ${payload.cid} ${targetClient ? 'done' : 'failed'}.`
       }
     };
+  }
+
+  @SubscribeMessage('log')
+  handleLog(client: WebSocket, payload: LogPayload): void {
+    const id = this.clients.get(client);
+    console.log(`[${payload.level}@${id}] ${payload.message}`);
+  }
+
+  @SubscribeMessage('stats')
+  handleStats(client: WebSocket, payload: StatsPayload): void {
+    console.log("received stats");
+    const id = this.clients.get(client);
+    console.log(`[stats@${id}] ${payload}`);
   }
 
   @SubscribeMessage('push')

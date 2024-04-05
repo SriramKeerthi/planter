@@ -5,13 +5,63 @@
   "projectType": "application",
   "targets": {
     "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/planter-ws",
+        "format": [
+          "cjs"
+        ],
+        "bundle": false,
+        "main": "apps/planter-ws/src/main.ts",
+        "tsConfig": "apps/planter-ws/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/planter-ws/src/assets",
+            "output": "apps/planter-ws/src/assets",
+            "ignore": [
+              ".gitkeep"
+            ]
+          }
+        ],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "build2": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/planter-ws",
         "main": "apps/planter-ws/src/main.ts",
         "tsConfig": "apps/planter-ws/tsconfig.app.json",
-        "assets": ["apps/planter-ws/src/assets"]
+        "assets": [
+          "apps/planter-ws/src/assets"
+        ],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
