@@ -1,21 +1,54 @@
-version: '3.9'
-
 services:
-  ws:
+  # ws:
+  #   stdin_open: true
+  #   container_name: planter-ws
+  #   build: 
+  #     context: ./
+  #     dockerfile: ./apps/planter-ws/Dockerfile
+  #   restart: unless-stopped
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - /app/assets
+  #   ports:
+  #     - "127.0.0.1:7597:3000"
+  #   networks:
+  #     - server_default
+
+  client:
     stdin_open: true
-    container_name: planter-ws
+    container_name: planter-client
     build: 
       context: ./
-      dockerfile: ./apps/planter-ws/Dockerfile
-    env_file:
-      - .env
+      dockerfile: ./apps/planter-ws-client/Dockerfile
+    restart: unless-stopped
+    environment:
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PASS=${MQTT_PASS}
+      - PLANTER_HOME=${PLANTER_HOME}
     volumes:
-      - /app/assets
+      - ${PLANTER_HOME}/assets:/app/assets/
+    networks:
+      - server_default
+    # platform: linux/amd64
+    depends_on:
+      - mosquitto
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    hostname: mosquitto
+    container_name: planter-mosquitto
+    restart: unless-stopped
     ports:
-      - "127.0.0.1:7597:3000"
+      - "0.0.0.0:1884:1883"
+    volumes:
+      - ${PLANTER_HOME}/mosquitto:/etc/mosquitto
+      - ${PLANTER_HOME}/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
     networks:
       - server_default
 
 networks:
   server_default:
-    external: true
+    name: ${NETWORK_NAME}
+    external: ${NETWORK_EXTERNAL}

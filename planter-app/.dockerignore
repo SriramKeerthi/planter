@@ -6,3 +6,5 @@ scripts/
 tmp/
 .vscode/
 .nx/
+assets/
+apps/planter-ws-client/assets/
